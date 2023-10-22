@@ -10,7 +10,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
-base_model = tf.keras.applications.EfficientNetB2(
+base_model = tf.keras.applications.EfficientNetB7(
     weights="imagenet", input_shape=(224, 224, 3), include_top=False
 )
 
@@ -19,11 +19,11 @@ for layer in base_model.layers:
     layer.trainable = False
 model = Sequential()
 model.add(base_model)
-# model.add(GaussianNoise(0.25))
+model.add(GaussianNoise(0.25))
 model.add(GlobalAveragePooling2D())
 model.add(Dense(256, activation="relu"))
 model.add(BatchNormalization())
-# model.add(GaussianNoise(0.25))
+model.add(GaussianNoise(0.25))
 model.add(Dropout(0.25))
 model.add(Dense(4, activation="softmax"))
 
